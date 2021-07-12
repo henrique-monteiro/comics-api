@@ -1,4 +1,4 @@
-package com.zup.comicsapi.UsuarioReposiroty;
+package com.zup.comicsapi.reposiroty;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

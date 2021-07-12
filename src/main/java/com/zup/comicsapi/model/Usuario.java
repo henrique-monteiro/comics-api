@@ -26,7 +26,20 @@ public class Usuario {
 	private String cpf;
 	
 	@NotNull @NotBlank
-	private String DataDeNascimento;
+	private String dataDeNascimento;
+	
+	
+	public Usuario() {	} //construtor vazio necessário para JPA
+	
+	
+	public Usuario(@NotBlank String nome, String email, String cpf, @NotBlank String dataDeNascimento) {
+		this.nome = nome;
+		this.email = email;
+		this.cpf = cpf;
+		this.dataDeNascimento = dataDeNascimento;
+	}
+
+
 
 	public long getId() {
 		return id;
@@ -61,11 +74,11 @@ public class Usuario {
 	}
 
 	public String getDataDeNascimento() {
-		return DataDeNascimento;
+		return dataDeNascimento;
 	}
 
 	public void setDataDeNascimento(String dataDeNascimento) {
-		DataDeNascimento = dataDeNascimento;
+		this.dataDeNascimento = dataDeNascimento;
 	}
 	
 	@Override
