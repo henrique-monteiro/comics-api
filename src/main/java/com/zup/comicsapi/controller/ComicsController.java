@@ -1,6 +1,7 @@
 package com.zup.comicsapi.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import com.zup.comicsapi.service.ComicsService;
 public class ComicsController {
 	
 	@Autowired
-	private ComicsRepository comicsRepostory;
+	private ComicsRepository comicsRepository;
 	
 	@Autowired
 	private ComicsService comicsService;
@@ -26,11 +27,17 @@ public class ComicsController {
 	@GetMapping
 	public ResponseEntity<Comics> searchAndSave(String id, UriComponentsBuilder uriBuilder) {
 		Comics comics = comicsService.searchAndSave(id); 
-		comicsRepostory.save(comics);
+		comicsRepository.save(comics);
 		
 		
 		//boas práticas do modelo REST (retornar 201 e nao 200)
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri();
 		return ResponseEntity.created(uri).body(comics);
+	}
+	
+	@GetMapping("lista")
+	public List<Comics> lista() { 
+		List<Comics> comics = comicsRepository.findAll();
+		return comics;
 	}
 }

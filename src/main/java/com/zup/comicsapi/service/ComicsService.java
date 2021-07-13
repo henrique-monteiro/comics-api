@@ -1,5 +1,8 @@
 package com.zup.comicsapi.service;
 
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,7 @@ public class ComicsService {
 
 	public Comics searchAndSave(String id) {
 		
-		//http://gateway.marvel.com/v1/public/comics/{comicId}?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
+		//http://gateway.marvel.com/v1/public/comics/2?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
 		UriComponents uri = UriComponentsBuilder.newInstance()
 				.scheme("http")
 				.host("gateway.marvel.com")
@@ -43,7 +46,21 @@ public class ComicsService {
 			comics.setDescription(json.getString("description"));
 		} else {
 			comics.setDescription(json.getString("description").substring(0, 250) + " ...");
-		}		
+		}	
+		
+		JSONArray prices = json.getJSONArray( "prices" );
+		
+		for(int i=0; i<prices.length(); i++) {
+			JSONObject joi = prices.getJSONObject(i);
+			if(joi.has("price")) {
+				System.out.println(joi.get("price"));
+				comics.setPrice(joi.getBigDecimal("price"));
+			}
+		}
+		
+		
+		
+		
 	
 		return comics;
 
