@@ -39,8 +39,6 @@ public class Usuario {
 		this.dataDeNascimento = dataDeNascimento;
 	}
 
-
-
 	public long getId() {
 		return id;
 	}

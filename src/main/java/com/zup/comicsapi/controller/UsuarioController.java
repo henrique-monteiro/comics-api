@@ -25,7 +25,6 @@ public class UsuarioController {
 
 //	@RequestMapping(value="/listaUsuarios")
 	@GetMapping
-	@ResponseBody
 	public List<Usuario> lista() { 
 		List<Usuario> usuarios = usuarioRepository.findAll();
 		System.out.println(usuarios);
