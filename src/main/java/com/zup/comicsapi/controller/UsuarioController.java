@@ -34,8 +34,7 @@ public class UsuarioController {
 		Usuario usuario = usuarioForm;
 		usuarioService.save(usuario);
 		
-		//boas práticas do modelo REST (retornar 201 e nao 200)
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
+		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201
 		return ResponseEntity.created(uri).body(usuario);
 	}
 	

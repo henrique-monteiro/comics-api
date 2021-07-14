@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.comicsapi.model.Comics;
-import com.zup.comicsapi.reposiroty.ComicsRepository;
 import com.zup.comicsapi.service.ComicsService;
 
 @RestController
@@ -19,25 +18,20 @@ import com.zup.comicsapi.service.ComicsService;
 public class ComicsController {
 	
 	@Autowired
-	private ComicsRepository comicsRepository;
-	
-	@Autowired
 	private ComicsService comicsService;
 	
 	@GetMapping
 	public ResponseEntity<Comics> searchAndSave(String id, UriComponentsBuilder uriBuilder) {
 		Comics comics = comicsService.searchAndSave(id); 
-		comicsRepository.save(comics);
+		comicsService.save(comics);
 		
-		
-		//boas práticas do modelo REST (retornar 201 e nao 200)
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri();
+		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
 		return ResponseEntity.created(uri).body(comics);
 	}
 	
 	@GetMapping("lista")
 	public List<Comics> lista() { 
-		List<Comics> comics = comicsRepository.findAll();
+		List<Comics> comics = comicsService.findAll();
 		return comics;
 	}
 	

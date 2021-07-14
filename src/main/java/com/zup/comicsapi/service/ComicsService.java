@@ -1,7 +1,10 @@
 package com.zup.comicsapi.service;
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,9 +12,13 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.comicsapi.model.Comics;
+import com.zup.comicsapi.reposiroty.ComicsRepository;
 
 @Service
 public class ComicsService {
+	
+	@Autowired
+	private ComicsRepository comicsRepository;
 
 	public Comics searchAndSave(String id) {
 		
@@ -54,14 +61,16 @@ public class ComicsService {
 				//System.out.println(joi.get("price"));
 				comics.setPrice(joi.getBigDecimal("price"));
 			}
-		}
-		
-		
-		
-		
-	
+		}		
 		return comics;
-
-
 	}
+
+	public void save(Comics comics) {
+		comicsRepository.save(comics);
+	}
+
+	public List<Comics> findAll() {		
+		return comicsRepository.findAll();
+	}
+	
 }
