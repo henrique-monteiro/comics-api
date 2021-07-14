@@ -6,6 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+
 
 @Entity
 public class Comics {
@@ -17,6 +21,9 @@ public class Comics {
 	private String creators;
 	private String isbn;
 	private String description;
+	
+	@ManyToOne
+	private Usuario usuario;
 	
 	public long getId() {
 		return id;
@@ -59,6 +66,12 @@ public class Comics {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	
 

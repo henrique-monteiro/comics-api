@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.reposiroty.ComicsRepository;
+import com.zup.comicsapi.reposiroty.UsuarioRepository;
 import com.zup.comicsapi.service.ComicsService;
 
 @RestController
@@ -40,4 +41,7 @@ public class ComicsController {
 		List<Comics> comics = comicsRepository.findAll();
 		return comics;
 	}
+	
+	
+	
 }

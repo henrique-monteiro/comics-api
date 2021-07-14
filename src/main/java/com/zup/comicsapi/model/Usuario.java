@@ -1,5 +1,6 @@
 package com.zup.comicsapi.model;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +28,9 @@ public class Usuario {
 	
 	@NotNull @NotBlank
 	private String dataDeNascimento;
+	
+	
+//	List<Comics> listaDeComics = new ArrayList<>();
 	
 	
 	public Usuario() {	} //construtor vazio necessário para JPA

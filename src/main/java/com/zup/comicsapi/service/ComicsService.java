@@ -53,7 +53,7 @@ public class ComicsService {
 		for(int i=0; i<prices.length(); i++) {
 			JSONObject joi = prices.getJSONObject(i);
 			if(joi.has("price")) {
-				System.out.println(joi.get("price"));
+				//System.out.println(joi.get("price"));
 				comics.setPrice(joi.getBigDecimal("price"));
 			}
 		}
