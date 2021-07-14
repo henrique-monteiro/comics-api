@@ -1,5 +1,6 @@
 package com.zup.comicsapi.service;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,14 +32,21 @@ public class ComicsPorUsuarioService {
 		
 		for (Comics comics : listaComicsPorUsuario) {
 			finalIsbn = comics.getIsbn().charAt(comics.getIsbn().length()-1);
-//			System.out.println(finalIsbn);
-//			System.out.println(diaDesconto(finalIsbn));
+
 			comics.setDiaDesconto(diaDesconto(finalIsbn));  
+			
 			comics.setDescontoAtivo(verificaDescontoAtivo(comics.getDiaDesconto()));
+			
+			if (comics.isDescontoAtivo()) {
+				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1))));
+			}
+			
 		}		
 		
 		return listaComicsPorUsuario;
 	}
+
+
 
 	private boolean verificaDescontoAtivo(String diaDesconto) {
 		Date data = new Date();
@@ -48,6 +56,7 @@ public class ComicsPorUsuarioService {
 		System.out.println(day);
 		
 		if (day == 2 && diaDesconto.compareTo("segunda-feira") == 0 ) {
+			
 			return true;
 		}
 		else if (day == 3 && diaDesconto.compareTo("terça-feira") == 0 ){
