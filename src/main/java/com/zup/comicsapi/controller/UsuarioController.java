@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,12 +20,11 @@ import com.zup.comicsapi.reposiroty.UsuarioRepository;
 public class UsuarioController {
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioRepository usuarioService;
 
-//	@RequestMapping(value="/listaUsuarios")
 	@GetMapping
 	public List<Usuario> lista() { 
-		List<Usuario> usuarios = usuarioRepository.findAll();
+		List<Usuario> usuarios = usuarioService.findAll();
 		System.out.println(usuarios);
 		return usuarios;
 	}
@@ -34,7 +32,7 @@ public class UsuarioController {
 	@PostMapping
 	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
 		Usuario usuario = usuarioForm;
-		usuarioRepository.save(usuario);
+		usuarioService.save(usuario);
 		
 		//boas práticas do modelo REST (retornar 201 e nao 200)
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
