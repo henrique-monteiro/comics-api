@@ -21,6 +21,8 @@ public class Comics {
 	private String creators;
 	private String isbn;
 	private String description;
+	private String diaDesconto;
+	private boolean descontoAtivo;
 	
 	@ManyToOne
 	private Usuario usuario;
@@ -73,7 +75,18 @@ public class Comics {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+	public String getDiaDesconto() {
+		return diaDesconto;
+	}
+	public void setDiaDesconto(String diaDesconto) {
+		this.diaDesconto = diaDesconto;
+	}
+	public boolean isDescontoAtivo() {
+		return descontoAtivo;
+	}
+	public void setDescontoAtivo(boolean descontoAtivo) {
+		this.descontoAtivo = descontoAtivo;
+	}
 
 	
 	

@@ -1,7 +1,5 @@
 package com.zup.comicsapi.service;
 
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;
