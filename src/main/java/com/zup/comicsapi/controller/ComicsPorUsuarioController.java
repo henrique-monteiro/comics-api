@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zup.comicsapi.dto.ComicsDto;
 import com.zup.comicsapi.model.Comics;
 
 import com.zup.comicsapi.service.ComicsPorUsuarioService;
@@ -20,9 +21,9 @@ public class ComicsPorUsuarioController {
 	private ComicsPorUsuarioService comicsPorUsuarioService;
 
 	@GetMapping()
-	public List<Comics> comicsPorUsuario(Long id) {
+	public List<ComicsDto> comicsPorUsuario(Long id) {
 		List<Comics> listaComicsPorUsuario = comicsPorUsuarioService.buscaComicsPorUsuario(id);
 		
-		return listaComicsPorUsuario;
+		return ComicsDto.converter(listaComicsPorUsuario);
 	}
 }
