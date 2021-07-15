@@ -9,5 +9,5 @@ import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.model.Usuario;
 
 public interface ComicsRepository extends JpaRepository<Comics, Long>{
-	List<Comics> findByUsuario(Optional<Usuario> usuario);
+	List<Comics> findByUsuario(Usuario usuario);
 }

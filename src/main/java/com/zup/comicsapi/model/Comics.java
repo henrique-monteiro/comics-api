@@ -1,15 +1,11 @@
 package com.zup.comicsapi.model;
 
 import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
-
 
 @Entity
 public class Comics {
@@ -69,9 +65,9 @@ public class Comics {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Usuario getUsuario() {
-		return usuario;
-	}
+//	public Usuario getUsuario() {
+//		return usuario;
+//	}
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}

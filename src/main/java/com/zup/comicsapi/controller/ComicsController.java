@@ -21,8 +21,8 @@ public class ComicsController {
 	private ComicsService comicsService;
 	
 	@GetMapping
-	public ResponseEntity<Comics> searchAndSave(String id, UriComponentsBuilder uriBuilder) {
-		Comics comics = comicsService.searchAndSave(id); 
+	public ResponseEntity<Comics> searchAndSave(String idComic, long idUsuario, UriComponentsBuilder uriBuilder) {
+		Comics comics = comicsService.searchAndSave(idComic, idUsuario); 
 		comicsService.save(comics);
 		
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201

@@ -1,12 +1,15 @@
 package com.zup.comicsapi.model;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.OneToMany;
 
 import com.sun.istack.NotNull;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +17,8 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Usuario {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private long id;
 	
 	@NotNull @NotBlank
@@ -29,9 +33,8 @@ public class Usuario {
 	@NotNull @NotBlank
 	private String dataDeNascimento;
 	
-	
-//	List<Comics> listaDeComics = new ArrayList<>();
-	
+	@OneToMany(mappedBy = "usuario")
+	private List<Comics> listaDeComics = new ArrayList<>();	
 	
 	public Usuario() {	} //construtor vazio necessário para JPA
 	
@@ -86,6 +89,15 @@ public class Usuario {
 	@Override
 	public String toString() {
 		return "Nome: " + this.nome + ", CPF: " + this.cpf;
+	}
+	
+	public List<Comics> getListaDeComics() {
+		return listaDeComics;
+	}
+
+
+	public void setListaDeComics(List<Comics> listaDeComics) {
+		this.listaDeComics = listaDeComics;
 	}
 	
 }

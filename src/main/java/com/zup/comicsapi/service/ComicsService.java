@@ -12,21 +12,26 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.comicsapi.model.Comics;
+import com.zup.comicsapi.model.Usuario;
 import com.zup.comicsapi.reposiroty.ComicsRepository;
+import com.zup.comicsapi.reposiroty.UsuarioRepository;
 
 @Service
 public class ComicsService {
 	
 	@Autowired
 	private ComicsRepository comicsRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
-	public Comics searchAndSave(String id) {
+	public Comics searchAndSave(String idComics, long idUsuario) {
 		
 		//http://gateway.marvel.com/v1/public/comics/2?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
 		UriComponents uri = UriComponentsBuilder.newInstance()
 				.scheme("http")
 				.host("gateway.marvel.com")
-				.path("v1/public/comics/" + id)
+				.path("v1/public/comics/" + idComics)
 				.queryParam("ts", "1625840271")
 				.queryParam("apikey", "1292f518b5874baf11a56f55e28bf010")
 				.queryParam("hash", "5fe40325ef66ac6be88b70095c6d00b6")
@@ -44,7 +49,9 @@ public class ComicsService {
 		Comics comics = new Comics();
 		comics.setComicId(json.getInt("id"));
 		comics.setTitle(json.getString("title"));
-		comics.setIsbn(json.getString("isbn"));		
+		comics.setIsbn(json.getString("isbn"));	
+		Usuario usuario = usuarioRepository.findById(idUsuario).get();
+		comics.setUsuario(usuario);
 		
 		int maxLength = json.getString("description").length();
 		if (maxLength < 250) {

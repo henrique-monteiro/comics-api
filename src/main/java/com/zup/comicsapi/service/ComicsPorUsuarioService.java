@@ -1,17 +1,16 @@
 package com.zup.comicsapi.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.model.Usuario;
-import com.zup.comicsapi.reposiroty.ComicsRepository;
 import com.zup.comicsapi.reposiroty.UsuarioRepository;
 
 @Service
@@ -19,18 +18,22 @@ public class ComicsPorUsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	@Autowired
-	private ComicsRepository comicsRepository;
-	
-	public List<Comics> buscaComicsPorUsuario(Long id) {
+	public Usuario buscaComicsPorUsuario(Long id) {			
 		
-		char finalIsbn;		
+		Usuario usuario = usuarioRepository.findById(id).get();
 		
-		Optional<Usuario> usuario = usuarioRepository.findById(id);
-		
-		List<Comics> listaComicsPorUsuario = comicsRepository.findByUsuario(usuario);
-		
-		for (Comics comics : listaComicsPorUsuario) {
+		List<Comics> listaAtualizada = atualizaValoresDaListaDeComics(usuario);
+			
+		usuario.setListaDeComics(listaAtualizada);
+		return usuario;
+	}
+
+
+
+	private List<Comics> atualizaValoresDaListaDeComics(Usuario usuario) {
+		char finalIsbn;	
+		List<Comics> listaAtualizada = new ArrayList<>();
+		for (Comics comics : usuario.getListaDeComics()) {
 			finalIsbn = comics.getIsbn().charAt(comics.getIsbn().length()-1);
 
 			comics.setDiaDesconto(diaDesconto(finalIsbn));  
@@ -41,19 +44,16 @@ public class ComicsPorUsuarioService {
 				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1))));
 			}
 			
-		}		
-		
-		return listaComicsPorUsuario;
+			listaAtualizada.add(comics);
+		}
+		return listaAtualizada;
 	}
-
-
 
 	private boolean verificaDescontoAtivo(String diaDesconto) {
 		Date data = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(data);
 		int day = cal.get(Calendar.DAY_OF_WEEK);
-		System.out.println(day);
 		
 		if (day == 2 && diaDesconto.compareTo("segunda-feira") == 0 ) {
 			

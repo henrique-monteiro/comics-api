@@ -3,7 +3,7 @@ package com.zup.comicsapi.dto;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.model.Usuario;
@@ -76,13 +76,13 @@ public class ComicsDto {
 	public static List<ComicsDto> converter(List<Comics> listaComicsPorUsuario) {
 		List<ComicsDto> listaComicsPorUsuarioDto= new ArrayList<>();
 		
-		for(Comics comics : listaComicsPorUsuario) {			
-			listaComicsPorUsuarioDto.add(new ComicsDto(comics.getComicId(), comics.getTitle(), comics.getPrice(), 
-														comics.getCreators(), comics.getIsbn(), comics.getDescription(),
-														comics.getDiaDesconto(), comics.isDescontoAtivo(),
-														comics.getUsuario()));			
-														
-		}
+//		for(Comics comics : listaComicsPorUsuario) {			
+//			listaComicsPorUsuarioDto.add(new ComicsDto(comics.getComicId(), comics.getTitle(), comics.getPrice(), 
+//														comics.getCreators(), comics.getIsbn(), comics.getDescription(),
+//														comics.getDiaDesconto(), comics.isDescontoAtivo(),
+//														comics.getUsuario()));			
+//														
+//		}
 		
 		return listaComicsPorUsuarioDto;
 	}
