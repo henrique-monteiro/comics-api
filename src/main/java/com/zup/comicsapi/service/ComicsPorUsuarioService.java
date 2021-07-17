@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,15 @@ public class ComicsPorUsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	public Usuario buscaComicsPorUsuario(Long id) {			
+	public Usuario buscaComicsPorUsuario(Long id) {	
 		
-		Usuario usuario = usuarioRepository.findById(id).get();
+		Optional<Usuario> usuarioPorId = usuarioRepository.findById(id);
+		
+		if(usuarioPorId.isEmpty()) {
+			return null;
+		}
+		
+		Usuario usuario = usuarioPorId.get();
 		
 		List<Comics> listaAtualizada = atualizaValoresDaListaDeComics(usuario);
 			

@@ -1,6 +1,7 @@
 package com.zup.comicsapi.model;
 
 import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,12 +48,7 @@ public class Comics {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-	public String getCreators() {
-		return creators;
-	}
-	public void setCreators(String creators) {
-		this.creators = creators;
-	}
+
 	public String getIsbn() {
 		return isbn;
 	}
@@ -77,12 +73,19 @@ public class Comics {
 	public void setDiaDesconto(String diaDesconto) {
 		this.diaDesconto = diaDesconto;
 	}
+	public String getCreators() {
+		return creators;
+	}
+	public void setCreators(String creators) {
+		this.creators = creators;
+	}
 	public boolean isDescontoAtivo() {
 		return descontoAtivo;
 	}
 	public void setDescontoAtivo(boolean descontoAtivo) {
 		this.descontoAtivo = descontoAtivo;
 	}
+	
 
 	
 	

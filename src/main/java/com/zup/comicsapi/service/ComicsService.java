@@ -1,5 +1,6 @@
 package com.zup.comicsapi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -42,7 +43,7 @@ public class ComicsService {
 		restTemplate = restTemplateBuilder.build();
 
 		String body = restTemplate.getForEntity(url.toString(), String.class).getBody();
-		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam		
+		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam
 		
 		JSONObject json = new JSONObject(bodyFormatada);
 		
@@ -60,15 +61,30 @@ public class ComicsService {
 			comics.setDescription(json.getString("description").substring(0, 250) + " ...");
 		}	
 		
-		JSONArray prices = json.getJSONArray( "prices" );
-		
+		JSONArray prices = json.getJSONArray( "prices" );		
 		for(int i=0; i<prices.length(); i++) {
 			JSONObject joi = prices.getJSONObject(i);
 			if(joi.has("price")) {
-				//System.out.println(joi.get("price"));
 				comics.setPrice(joi.getBigDecimal("price"));
 			}
-		}		
+		}
+		
+		JSONObject creatorsJSON = json.getJSONObject("creators");
+		JSONArray items = creatorsJSON.getJSONArray("items");
+		List<String> autores = new ArrayList<>();
+		for(int i=0; i<items.length(); i++) {
+			JSONObject joi = items.getJSONObject(i);
+			if(joi.has("name")) {
+				autores.add(joi.getString("name"));
+			}
+		}
+		String creators = null;
+		for (String string : autores) {
+			
+			creators += string + ", ";
+		}
+		comics.setCreators(creators.substring(0, creators.length()-2));
+		
 		return comics;
 	}
 
