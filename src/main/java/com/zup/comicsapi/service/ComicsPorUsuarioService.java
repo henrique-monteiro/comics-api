@@ -28,20 +28,18 @@ public class ComicsPorUsuarioService {
 		return usuario;
 	}
 
-
-
 	private List<Comics> atualizaValoresDaListaDeComics(Usuario usuario) {
-		char finalIsbn;	
+		char finalIsbn;	//para verificar o dia do desconto
 		List<Comics> listaAtualizada = new ArrayList<>();
 		for (Comics comics : usuario.getListaDeComics()) {
 			finalIsbn = comics.getIsbn().charAt(comics.getIsbn().length()-1);
 
-			comics.setDiaDesconto(diaDesconto(finalIsbn));  
+			comics.setDiaDesconto(diaDesconto(finalIsbn));  //verifica o dia do desconto
 			
-			comics.setDescontoAtivo(verificaDescontoAtivo(comics.getDiaDesconto()));
+			comics.setDescontoAtivo(verificaDescontoAtivo(comics.getDiaDesconto())); //verifica se o desconto está ativo
 			
 			if (comics.isDescontoAtivo()) {
-				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1))));
+				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1)))); //atualiza o preço do comics
 			}
 			
 			listaAtualizada.add(comics);
@@ -96,5 +94,4 @@ public class ComicsPorUsuarioService {
 		return null;
 	}
 	
-
 }

@@ -18,7 +18,7 @@ public class UsuarioService {
 		return usuarioRepository.findAll();
 	}
 	
-	public Usuario save(Usuario usuario) {
+	public Usuario gravaUsuario(Usuario usuario) {
 		return usuarioRepository.save(usuario);
 	}
 }

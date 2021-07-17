@@ -25,10 +25,10 @@ public class ComicsService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	public Comics searchAndSave(String idComics, long idUsuario) {
+	public Comics buscaEGrava(String idComics, long idUsuario) {
 		
 		//http://gateway.marvel.com/v1/public/comics/2?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
-		UriComponents uri = UriComponentsBuilder.newInstance()
+		UriComponents url = UriComponentsBuilder.newInstance()
 				.scheme("http")
 				.host("gateway.marvel.com")
 				.path("v1/public/comics/" + idComics)
@@ -41,7 +41,7 @@ public class ComicsService {
 		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
 		restTemplate = restTemplateBuilder.build();
 
-		String body = restTemplate.getForEntity(uri.toString(), String.class).getBody();
+		String body = restTemplate.getForEntity(url.toString(), String.class).getBody();
 		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam		
 		
 		JSONObject json = new JSONObject(bodyFormatada);

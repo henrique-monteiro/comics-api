@@ -21,8 +21,8 @@ public class ComicsController {
 	private ComicsService comicsService;
 	
 	@GetMapping
-	public ResponseEntity<Comics> searchAndSave(String idComic, long idUsuario, UriComponentsBuilder uriBuilder) {
-		Comics comics = comicsService.searchAndSave(idComic, idUsuario); 
+	public ResponseEntity<Comics> buscaEGrava(String idComic, long idUsuario, UriComponentsBuilder uriBuilder) {
+		Comics comics = comicsService.buscaEGrava(idComic, idUsuario); 
 		comicsService.save(comics);
 		
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
@@ -33,8 +33,5 @@ public class ComicsController {
 	public List<Comics> lista() { 
 		List<Comics> comics = comicsService.findAll();
 		return comics;
-	}
-	
-	
-	
+	}	
 }

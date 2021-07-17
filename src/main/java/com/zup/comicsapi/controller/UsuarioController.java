@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.zup.comicsapi.model.Usuario;
-import com.zup.comicsapi.reposiroty.UsuarioRepository;
+import com.zup.comicsapi.service.UsuarioService;
 
 @RestController
 @RequestMapping(value="/usuarios")
 public class UsuarioController {
 	
 	@Autowired
-	private UsuarioRepository usuarioService;
+	private UsuarioService usuarioService;
 
 	@GetMapping
 	public List<Usuario> lista() { 
@@ -32,7 +32,7 @@ public class UsuarioController {
 	@PostMapping
 	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
 		Usuario usuario = usuarioForm;
-		usuarioService.save(usuario);
+		usuarioService.gravaUsuario(usuario);
 		
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201
 		return ResponseEntity.created(uri).body(usuario);
