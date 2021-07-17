@@ -19,6 +19,12 @@ public class UsuarioService {
 	}
 	
 	public Usuario gravaUsuario(Usuario usuario) {
+
+		if(usuarioRepository.findByEmail(usuario.getEmail()) != null || 
+				usuarioRepository.findByCpf(usuario.getCpf()) != null){
+			return null;
+		}
+		
 		return usuarioRepository.save(usuario);
 	}
 }
