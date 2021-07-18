@@ -1,6 +1,7 @@
 package com.zup.comicsapi.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,7 @@ public class Comics {
 		this.title = title;
 	}
 	public BigDecimal getPrice() {
-		return price;
+		return price.divide(new BigDecimal("1.2"),2,RoundingMode.UP);
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
@@ -84,12 +85,7 @@ public class Comics {
 	}
 	public void setDescontoAtivo(boolean descontoAtivo) {
 		this.descontoAtivo = descontoAtivo;
-	}
-	
-
-	
-	
-	
+	}	
 	
 }
 	

@@ -19,9 +19,7 @@ public class ComicsDto {
 	private String diaDesconto;
 	private boolean descontoAtivo;
 	
-	private String nomeDoUsuario;
-	
-	
+	private String nomeDoUsuario;	
 
 	public ComicsDto(long comicId, String title, BigDecimal price, String creators, String isbn, String description,
 			String diaDesconto, boolean descontoAtivo, Usuario usuario) {
@@ -74,16 +72,7 @@ public class ComicsDto {
 	}
 
 	public static List<ComicsDto> converter(List<Comics> listaComicsPorUsuario) {
-		List<ComicsDto> listaComicsPorUsuarioDto= new ArrayList<>();
-		
-//		for(Comics comics : listaComicsPorUsuario) {			
-//			listaComicsPorUsuarioDto.add(new ComicsDto(comics.getComicId(), comics.getTitle(), comics.getPrice(), 
-//														comics.getCreators(), comics.getIsbn(), comics.getDescription(),
-//														comics.getDiaDesconto(), comics.isDescontoAtivo(),
-//														comics.getUsuario()));			
-//														
-//		}
-		
+		List<ComicsDto> listaComicsPorUsuarioDto= new ArrayList<>();	
 		return listaComicsPorUsuarioDto;
 	}
 	

@@ -84,7 +84,6 @@ public class ComicsService {
 			creators += string + ", ";
 		}
 		comics.setCreators(creators.substring(0, creators.length()-2));
-		
 		return comics;
 	}
 
