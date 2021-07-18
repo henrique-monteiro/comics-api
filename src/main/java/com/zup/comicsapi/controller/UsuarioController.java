@@ -23,8 +23,7 @@ public class UsuarioController {
 
 	@PostMapping
 	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
-		Usuario usuario = usuarioForm;
-		
+		Usuario usuario = usuarioForm;		
 		
 		if (usuarioService.gravaUsuario(usuario) != null) { //usuario registrado
 			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201

@@ -27,5 +27,5 @@ public class ComicsController {
 		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
 		return ResponseEntity.created(uri).body(comics);
 	}
-		
+			
 }
