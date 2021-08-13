@@ -1,6 +1,7 @@
 package com.zup.comicsapi.controller;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,5 +40,5 @@ public class UsuarioControllerTest {
 		.perform(MockMvcRequestBuilders.post(uri).content(usuarioJson).contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().is(400));
 	}
-
+	
 }

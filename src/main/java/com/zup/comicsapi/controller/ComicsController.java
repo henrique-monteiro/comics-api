@@ -3,6 +3,7 @@ package com.zup.comicsapi.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,13 @@ public class ComicsController {
 	@GetMapping
 	public ResponseEntity<Comics> buscaEGrava(String idComic, long idUsuario, UriComponentsBuilder uriBuilder) {
 		Comics comics = comicsService.buscaEGrava(idComic, idUsuario); 
-		comicsService.save(comics);
 		
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
-		return ResponseEntity.created(uri).body(comics);
-	}
-			
+		if (comics == null) { //usuario nao encontrado
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} else {
+			comicsService.save(comics);			
+			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
+			return ResponseEntity.created(uri).body(comics);
+		}		
+	}			
 }

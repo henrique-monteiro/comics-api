@@ -1,6 +1,5 @@
 package com.zup.comicsapi.reposiroty;
 
-
 import java.util.Optional;
 
 import org.junit.Assert;
@@ -20,15 +19,15 @@ import com.zup.comicsapi.model.Usuario;
 public class UsuarioRepositoryTest {
 
 	@Autowired
-	private UsuarioRepository repositoy;
+	private UsuarioRepository repository;
 	@Test
 	public void deveriaCarregarUmUsuarioAoBuscarPeloSeuId() {
 		long idUsuario = 1;
 		
-		Optional<Usuario> usuarioOptional = repositoy.findById(idUsuario);		
+		Optional<Usuario> usuarioOptional = repository.findById(idUsuario);		
 		Assert.assertNotNull(usuarioOptional);
 		
-		Usuario usuario = repositoy.findById(idUsuario).get();
+		Usuario usuario = repository.findById(idUsuario).get();
 		Assert.assertEquals("henrique", usuario.getNome());
 	}
 	
@@ -36,8 +35,9 @@ public class UsuarioRepositoryTest {
 	public void nãoDeveriaCarregarUmUsuarioQueNaoEstejaCadastrado() {
 		long idUsuario = 3;
 		
-		Optional<Usuario> usuario = repositoy.findById(idUsuario);		
+		Optional<Usuario> usuario = repository.findById(idUsuario);		
 		Assert.assertEquals(Optional.empty(), usuario);
 	}
 
+	
 }

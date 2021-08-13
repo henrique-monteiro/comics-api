@@ -19,7 +19,7 @@ public class ComicsPorUsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	public Usuario buscaComicsPorUsuario(Long id) {	
+	public Usuario buscaComicsPorUsuario(Long id) {	//feedback ZUP
 		
 		Optional<Usuario> usuarioPorId = usuarioRepository.findById(id);
 		
@@ -102,3 +102,4 @@ public class ComicsPorUsuarioService {
 	}
 	
 }
+

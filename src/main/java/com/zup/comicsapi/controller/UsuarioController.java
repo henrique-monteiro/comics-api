@@ -5,6 +5,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +26,11 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
 		Usuario usuario = usuarioForm;		
 		
-		if (usuarioService.gravaUsuario(usuario) != null) { //usuario registrado
-			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201
-			return ResponseEntity.created(uri).body(usuario);
+		if(usuarioService.gravaUsuario(usuario) == null) { //null se usuário já exite
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);	
 		}
 		
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //usuario ja existente		
-		
+		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201
+		return ResponseEntity.created(uri).body(usuario);			
 	}
-	
 }

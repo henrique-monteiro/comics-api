@@ -2,6 +2,7 @@ package com.zup.comicsapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.zup.comicsapi.exceptions.UsuarioNaoExisteException;
 import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.model.Usuario;
 import com.zup.comicsapi.reposiroty.ComicsRepository;
@@ -50,9 +52,19 @@ public class ComicsService {
 		Comics comics = new Comics();
 		comics.setComicId(json.getInt("id"));
 		comics.setTitle(json.getString("title"));
-		comics.setIsbn(json.getString("isbn"));	
-		Usuario usuario = usuarioRepository.findById(idUsuario).get();
-		comics.setUsuario(usuario);
+		comics.setIsbn(json.getString("isbn"));
+		
+		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);	
+		try {
+			if (usuarioOptional.isEmpty()) {
+				throw new UsuarioNaoExisteException("Usuário não existe!");				
+			}			
+		} catch (UsuarioNaoExisteException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+		
+		comics.setUsuario(usuarioOptional.get());
 		
 		int maxLength = json.getString("description").length();
 		if (maxLength < 250) {
