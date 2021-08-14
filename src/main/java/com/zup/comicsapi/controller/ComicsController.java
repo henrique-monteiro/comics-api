@@ -1,6 +1,7 @@
 package com.zup.comicsapi.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,10 @@ public class ComicsController {
 			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
 			return ResponseEntity.created(uri).body(comics);
 		}		
-	}			
+	}
+	@GetMapping("lista")
+	public List<Comics> lista() { 
+		List<Comics> comics = comicsService.findAll();
+		return comics;
+	}
 }
