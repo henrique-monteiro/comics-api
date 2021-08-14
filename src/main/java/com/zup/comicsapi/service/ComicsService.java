@@ -2,7 +2,6 @@ package com.zup.comicsapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,11 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.zup.comicsapi.exceptions.UsuarioNaoExisteException;
 import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.model.Usuario;
 import com.zup.comicsapi.reposiroty.ComicsRepository;
-import com.zup.comicsapi.reposiroty.UsuarioRepository;
 
 @Service
 public class ComicsService {
@@ -26,7 +23,7 @@ public class ComicsService {
 	private ComicsRepository comicsRepository;
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioService usuarioService;
 
 	public Comics buscaEGrava(String idComics, long idUsuario) {
 		
@@ -54,17 +51,13 @@ public class ComicsService {
 		comics.setTitle(json.getString("title"));
 		comics.setIsbn(json.getString("isbn"));
 		
-		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);	
-		try {
-			if (usuarioOptional.isEmpty()) {
-				throw new UsuarioNaoExisteException("Usuário não existe!");				
-			}			
-		} catch (UsuarioNaoExisteException e) {
-			System.out.println(e.getMessage());
+		Usuario usuario = usuarioService.buscaUsuarioPorId(idUsuario);
+		
+		if (usuario == null) {
 			return null;
 		}
 		
-		comics.setUsuario(usuarioOptional.get());
+		comics.setUsuario(usuario);
 		
 		int maxLength = json.getString("description").length();
 		if (maxLength < 250) {
@@ -91,8 +84,7 @@ public class ComicsService {
 			}
 		}
 		String creators = null;
-		for (String string : autores) {
-			
+		for (String string : autores) {			
 			creators += string + ", ";
 		}
 		comics.setCreators(creators.substring(0, creators.length()-2));

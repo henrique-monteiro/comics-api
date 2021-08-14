@@ -23,7 +23,7 @@ public class ComicsPorUsuarioController {
 	public ResponseEntity<UsuarioDto> comicsPorUsuario(Long idUsuario) {
 		Usuario usuarioComListaAtualizada = comicsPorUsuarioService.buscaComicsPorUsuario(idUsuario);
 		
-		if(usuarioComListaAtualizada == null) {
+		if(usuarioComListaAtualizada == null) { //no caso de usuario nao existe
 			return ResponseEntity.notFound().build();
 		}
 		

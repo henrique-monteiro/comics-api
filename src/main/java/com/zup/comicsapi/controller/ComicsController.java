@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class ComicsController {
 		Comics comics = comicsService.buscaEGrava(idComic, idUsuario); 
 		
 		if (comics == null) { //usuario nao encontrado
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return ResponseEntity.notFound().build();
 		} else {
 			comicsService.save(comics);			
 			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201

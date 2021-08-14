@@ -5,29 +5,26 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zup.comicsapi.model.Comics;
 import com.zup.comicsapi.model.Usuario;
-import com.zup.comicsapi.reposiroty.UsuarioRepository;
 
 @Service
 public class ComicsPorUsuarioService {
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 	
-	public Usuario buscaComicsPorUsuario(Long id) {	//feedback ZUP
+	@Autowired
+	private UsuarioService usuarioService;	
+	
+	public Usuario buscaComicsPorUsuario(Long idUsuario) {	//feedback ZUP: nao trabalhar com id para busacs
+			
+		Usuario usuario = usuarioService.buscaUsuarioPorId(idUsuario);
 		
-		Optional<Usuario> usuarioPorId = usuarioRepository.findById(id);
-		
-		if(usuarioPorId.isEmpty()) {
+		if (usuario == null) {
 			return null;
 		}
-		
-		Usuario usuario = usuarioPorId.get();
 		
 		List<Comics> listaAtualizada = atualizaValoresDaListaDeComics(usuario);
 			
@@ -47,8 +44,7 @@ public class ComicsPorUsuarioService {
 			
 			if (comics.isDescontoAtivo()) {
 				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1)))); //atualiza o preço do comics
-			}
-			
+			}			
 			listaAtualizada.add(comics);
 		}
 		return listaAtualizada;
@@ -60,8 +56,7 @@ public class ComicsPorUsuarioService {
 		cal.setTime(data);
 		int day = cal.get(Calendar.DAY_OF_WEEK);
 		
-		if (day == 2 && diaDesconto.compareTo("segunda-feira") == 0 ) {
-			
+		if (day == 2 && diaDesconto.compareTo("segunda-feira") == 0 ) {			
 			return true;
 		}
 		else if (day == 3 && diaDesconto.compareTo("terça-feira") == 0 ){
@@ -79,7 +74,6 @@ public class ComicsPorUsuarioService {
 		else {
 			return false;
 		}		
-		
 	}
 
 	private String diaDesconto(char finalIsbn) {
@@ -99,7 +93,6 @@ public class ComicsPorUsuarioService {
 			return "sexta-feira";
 		}
 		return null;
-	}
-	
+	}	
 }
 
