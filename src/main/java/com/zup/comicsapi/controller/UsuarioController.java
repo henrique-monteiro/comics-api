@@ -50,12 +50,15 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/{id}")
-	public UsuarioDto detalhar(@PathVariable Long id) {
+	public ResponseEntity<UsuarioDto> detalhar(@PathVariable Long id) {
 		if (usuarioRepository.findById(id).isPresent()) {
-			return new UsuarioDto(usuarioRepository.findById(id).get());
-		}
-		
-		return null;
-		
+			return ResponseEntity.ok(new UsuarioDto(usuarioRepository.findById(id).get()));
+		}		
+		return ResponseEntity.notFound().build();		
 	}
+	
+	
+	
+	
+	
 }
