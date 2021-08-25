@@ -3,6 +3,8 @@ package com.zup.comicsapi.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 
 	@PostMapping
-	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Usuario> cadastrar(@RequestBody @Valid Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
 		Usuario usuario = usuarioForm;		
 		
 		if(usuarioService.gravaUsuario(usuario) == null) { //null se usuário já exite
