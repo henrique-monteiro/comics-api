@@ -36,11 +36,18 @@ public class ComicsPorUsuarioService {
 		char finalIsbn;	//para verificar o dia do desconto
 		List<Comics> listaAtualizada = new ArrayList<>();
 		for (Comics comics : usuario.getListaDeComics()) {
-			finalIsbn = comics.getIsbn().charAt(comics.getIsbn().length()-1);
-
-			comics.setDiaDesconto(diaDesconto(finalIsbn));  //verifica o dia do desconto
 			
-			comics.setDescontoAtivo(verificaDescontoAtivo(comics.getDiaDesconto())); //verifica se o desconto está ativo
+			//caso não tenha ISBN no comic consumido pela API da Marvel
+			if (comics.getIsbn().isBlank()) {
+				comics.setDiaDesconto("Não possui dia com desconto");
+				comics.setDescontoAtivo(false);
+			} else {
+				finalIsbn = comics.getIsbn().charAt(comics.getIsbn().length()-1);
+
+				comics.setDiaDesconto(diaDesconto(finalIsbn));  //verifica o dia do desconto
+				
+				comics.setDescontoAtivo(verificaDescontoAtivo(comics.getDiaDesconto())); //verifica se o desconto está ativo
+			}			
 			
 			if (comics.isDescontoAtivo()) {
 				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1)))); //atualiza o preço do comics

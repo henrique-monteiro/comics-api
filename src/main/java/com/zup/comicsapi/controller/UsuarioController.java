@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,10 +66,19 @@ public class UsuarioController {
 			return ResponseEntity.notFound().build();
 		} else {
 			usuario = usuarioService.atualizarUsuario(usuario, usuarioAtualizar);
-			System.out.println("antes do return do controller");
 			return ResponseEntity.ok(new UsuarioDto(usuario));
-		}
-		
+		}		
+	}
+	
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> remover(@PathVariable Long id) {
+		if (usuarioService.buscaUsuarioPorId(id) == null) {
+			return ResponseEntity.notFound().build();
+		} else {
+			usuarioService.delete(id);
+			return ResponseEntity.ok().build();
+		}		
 	}
 	
 	

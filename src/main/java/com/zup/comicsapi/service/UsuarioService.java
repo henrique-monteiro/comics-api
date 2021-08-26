@@ -73,4 +73,10 @@ public class UsuarioService {
 		
 		
 	}
+
+	public void delete(Long id) {
+		// TODO Auto-generated method stub
+		usuarioRepository.deleteById(id);
+		
+	}
 }
