@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zup.comicsapi.dto.UsuarioAtualizarDto;
 import com.zup.comicsapi.exceptions.UsuarioJaExisteException;
 import com.zup.comicsapi.exceptions.UsuarioNaoExisteException;
 import com.zup.comicsapi.model.Usuario;
@@ -51,5 +52,25 @@ public class UsuarioService {
 			return null;
 		}
 
+	}
+
+	public Usuario atualizarUsuario(Usuario usuario, UsuarioAtualizarDto usuarioAtualizar) {
+		if (!usuarioAtualizar.getNome().isBlank()) {
+			System.out.println("nome");
+			usuario.setNome(usuarioAtualizar.getNome());
+		}
+		
+		if (!usuarioAtualizar.getEmail().isBlank()) {
+			System.out.println("email");
+			usuario.setEmail(usuarioAtualizar.getEmail());
+		}	
+		
+		System.out.println(usuario);
+		
+		System.out.println("antes do return");
+
+		return usuario;
+		
+		
 	}
 }

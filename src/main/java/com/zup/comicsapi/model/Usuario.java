@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import org.hibernate.validator.constraints.br.CPF;
-
 
 @Entity
 public class Usuario {
@@ -30,11 +28,10 @@ public class Usuario {
 
 	@NotBlank(message = "Este campo não pode estar em branco.")
 	@Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}", message = "O campo CPF deve seguir o formato XXX.XXX.XXX-XX")
-	@CPF
 	private String cpf;
 	
 	@NotBlank(message = "Este campo não pode estar em branco.")
-	@Pattern(regexp = "\\d{2}\\/\\d{2}\\/\\d{4}\\", message = "O campo CPF deve seguir o formato XXX.XXX.XXX-XX")
+	@Pattern(regexp = "\\d{2}\\/\\d{2}\\/\\d{4}", message = "O campo Data de Nascimento deve seguir o formato XX/XX/XXXX")
 	private String dataDeNascimento;
 	
 	@OneToMany(mappedBy = "usuario")
@@ -43,7 +40,7 @@ public class Usuario {
 	public Usuario() {	} //construtor vazio necessário para JPA
 	
 	
-	public Usuario(@NotBlank String nome, String email, String cpf, @NotBlank String dataDeNascimento) {
+	public Usuario(String nome, String email, String cpf, String dataDeNascimento) {
 		this.nome = nome;
 		this.email = email;
 		this.cpf = cpf;
@@ -92,7 +89,7 @@ public class Usuario {
 	
 	@Override
 	public String toString() {
-		return "Nome: " + this.nome + ", CPF: " + this.cpf;
+		return "Nome: " + this.nome + ", CPF: " + this.cpf + ", Email: " + this.email;
 	}
 	
 	public List<Comics> getListaDeComics() {
