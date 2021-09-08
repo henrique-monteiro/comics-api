@@ -44,6 +44,7 @@ public class ConfiguracoesSeguranca extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/comics").permitAll()
 								.antMatchers(HttpMethod.POST, "/auth").permitAll()
+								.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()								
 								.anyRequest().authenticated()
 //								.and().formLogin() //cria session (JSESSION, que não é stateless)
 								.and().csrf().disable()//desabilita a proteção contra o ataque hacker csrf (JSESSION)
@@ -54,6 +55,7 @@ public class ConfiguracoesSeguranca extends WebSecurityConfigurerAdapter {
 	
 	@Override //configuracoes de recursos estaticos de frontend (js, css, imagens, etc..)
 	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
 	}
 	
 //	public static void main(String[] args) {
