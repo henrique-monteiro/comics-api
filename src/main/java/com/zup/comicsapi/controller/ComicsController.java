@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,19 +21,19 @@ public class ComicsController {
 	@Autowired
 	private ComicsService comicsService;
 	
-	@GetMapping
-	public ResponseEntity<Comics> buscaEGrava(String idComic, long idUsuario, UriComponentsBuilder uriBuilder) {
+	@GetMapping("/{idUsuario}")
+	public ResponseEntity<Comics> buscaEGrava(@PathVariable long idUsuario, String idComic, UriComponentsBuilder uriBuilder) {
 		Comics comics = comicsService.buscaEGrava(idComic, idUsuario); 
 		
 		if (comics == null) { //usuario nao encontrado
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build(); //404 não encontrado
 		} else {
 			comicsService.save(comics);			
 			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(comics.getId()).toUri(); //retornar 201
 			return ResponseEntity.created(uri).body(comics);
 		}		
 	}
-	@GetMapping("lista")
+	@GetMapping
 	public List<Comics> lista() { 
 		List<Comics> comics = comicsService.findAll();
 		return comics;

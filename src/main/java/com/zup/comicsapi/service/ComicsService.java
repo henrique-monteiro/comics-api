@@ -27,6 +27,16 @@ public class ComicsService {
 
 	public Comics buscaEGrava(String idComics, long idUsuario) {
 		
+		//ts = 1625840271
+		//private key = 21ed559bcd08b974ca2c8b73d654a2bc2980dd70
+		//public key (apikey) = 1292f518b5874baf11a56f55e28bf010	
+		
+		/*
+		 * Para obter o hash, acessar http://andti.com.br/tool/hash e, no campo "Mensagem", 
+		 * inserir ts+privateKey+publicKey, como mostrado abaixo:
+		 * 162584027121ed559bcd08b974ca2c8b73d654a2bc2980dd701292f518b5874baf11a56f55e28bf010
+		*/
+		
 		//http://gateway.marvel.com/v1/public/comics/2?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
 		UriComponents url = UriComponentsBuilder.newInstance()
 				.scheme("http")
@@ -36,7 +46,7 @@ public class ComicsService {
 				.queryParam("apikey", "1292f518b5874baf11a56f55e28bf010")
 				.queryParam("hash", "5fe40325ef66ac6be88b70095c6d00b6")
 				.build();
-		
+				
 		RestTemplate restTemplate = new RestTemplate();
 		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
 		restTemplate = restTemplateBuilder.build();

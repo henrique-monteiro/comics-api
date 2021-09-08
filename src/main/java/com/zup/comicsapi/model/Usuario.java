@@ -2,26 +2,38 @@ package com.zup.comicsapi.model;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails { 
+
+	private static final long serialVersionUID = 1L;
+
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private long id;
+	private Long id;
 	
 	@NotBlank(message = "Este campo não pode estar em branco.")
 	private String nome;
+	
+	@NotBlank(message = "Este campo não pode estar em branco.")
+	private String senha;
 	 
 	@NotBlank(message = "Este campo não pode estar em branco.")
 	private String email;
@@ -35,7 +47,10 @@ public class Usuario {
 	private String dataDeNascimento;
 	
 	@OneToMany(mappedBy = "usuario")
-	private List<Comics> listaDeComics = new ArrayList<>();	
+	private List<Comics> listaDeComics = new ArrayList<>();
+
+	@ManyToMany(fetch = FetchType.EAGER) //dessa forma ao carregar o usuario, carrega-se a lista de perfis dele
+	private List<Perfil> perfis = new ArrayList<>();	
 	
 	public Usuario() {	} //construtor vazio necessário para JPA
 	
@@ -47,11 +62,11 @@ public class Usuario {
 		this.dataDeNascimento = dataDeNascimento;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -62,6 +77,14 @@ public class Usuario {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}	
 
 	public String getEmail() {
 		return email;
@@ -99,6 +122,42 @@ public class Usuario {
 
 	public void setListaDeComics(List<Comics> listaDeComics) {
 		this.listaDeComics = listaDeComics;
+	}
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.perfis;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 	
 }

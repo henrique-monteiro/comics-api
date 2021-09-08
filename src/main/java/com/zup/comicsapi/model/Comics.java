@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Comics {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	private long comicId;	
 	private String title;
 	private BigDecimal price;
@@ -25,10 +25,10 @@ public class Comics {
 	@ManyToOne
 	private Usuario usuario;
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public long getComicId() {

@@ -22,20 +22,20 @@ public class ErroDeValidacaoHandler {
 	private MessageSource messageSource; //trata mensagem de erro de acordo com o idioma que o cliente faz a requisição
 	
 	
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST) //codigo de retorno
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public List<ErroDeFormularioDto> handle(MethodArgumentNotValidException exception){
-		List<ErroDeFormularioDto> dto = new ArrayList<>();
+	public List<ErroDeFormularioDto> trataErro(MethodArgumentNotValidException exception){ //parametro exception contem todos os erros encontrados
+		List<ErroDeFormularioDto> listaErroDeFormularioDto = new ArrayList<>();
 		
-		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+		List<FieldError> camposComErro = exception.getBindingResult().getFieldErrors(); //obtem os campos com erros
 		
-		for (FieldError fieldError : fieldErrors) {
-			String mensagem = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-			ErroDeFormularioDto erro = new ErroDeFormularioDto(fieldError.getField(), mensagem);
-			dto.add(erro);
+		for (FieldError campoComErro : camposComErro) {
+			String mensagem = messageSource.getMessage(campoComErro, LocaleContextHolder.getLocale());
+			ErroDeFormularioDto erro = new ErroDeFormularioDto(campoComErro.getField(), mensagem);
+			listaErroDeFormularioDto.add(erro);
 		}
 		
-		return dto;
+		return listaErroDeFormularioDto;
 		
 	}
 

@@ -53,7 +53,7 @@ public class UsuarioController {
 	public ResponseEntity<UsuarioDto> detalhar(@PathVariable Long id) {
 		Usuario usuario = usuarioService.buscaUsuarioPorId(id);
 		if (usuario == null) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build(); //404 não encontrado
 		}			
 		return ResponseEntity.ok(new UsuarioDto(usuario));
 	}
@@ -63,7 +63,7 @@ public class UsuarioController {
 	public ResponseEntity<UsuarioDto> atualizar(@PathVariable Long id, @RequestBody UsuarioAtualizarDto usuarioAtualizar){
 		Usuario usuario = usuarioService.buscaUsuarioPorId(id);
 		if (usuario == null) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build(); //404 não encontrado
 		} else {
 			usuario = usuarioService.atualizarUsuario(usuario, usuarioAtualizar);
 			return ResponseEntity.ok(new UsuarioDto(usuario));
@@ -74,7 +74,7 @@ public class UsuarioController {
 	@Transactional
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 		if (usuarioService.buscaUsuarioPorId(id) == null) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build(); //404 não encontrado
 		} else {
 			usuarioService.delete(id);
 			return ResponseEntity.ok().build();
