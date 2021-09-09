@@ -9,6 +9,6 @@ import com.zup.comicsapi.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	Optional<Usuario> findById(Long Id);
 	Optional<Usuario> findByEmail(String email);
-	Usuario findByCpf(String cpf);
+	Optional<Usuario> findByCpf(String cpf);
 	
 }

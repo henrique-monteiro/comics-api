@@ -25,8 +25,8 @@ public class UsuarioService {
 	public Usuario gravaUsuario(Usuario usuario) {
 		//log: verificando se usuario existe
 		try {
-			if (usuarioRepository.findByEmail(usuario.getEmail()) != null
-					|| usuarioRepository.findByCpf(usuario.getCpf()) != null) {
+			if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()
+					|| usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
 				throw new UsuarioJaExisteException("Usuário já existe!");
 			}
 		} catch (UsuarioJaExisteException e) {

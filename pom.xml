@@ -64,7 +64,7 @@
 		
 		<dependency>
     		<groupId>io.jsonwebtoken</groupId>
-    		<artifactId>jjwt</artifactId>
+    		<artifactId>jjwt</artifactId> <!-- criar token -->
     		<version>0.9.1</version>
 		</dependency>	
 		
