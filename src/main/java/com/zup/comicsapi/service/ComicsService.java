@@ -54,6 +54,10 @@ public class ComicsService {
 		String body = restTemplate.getForEntity(url.toString(), String.class).getBody();
 		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam
 		
+		System.out.println("\n\n");
+		System.out.println(bodyFormatada);
+		System.out.println("\n\n");
+		
 		JSONObject json = new JSONObject(bodyFormatada);
 		
 		Comics comics = new Comics();
@@ -84,20 +88,28 @@ public class ComicsService {
 			}
 		}
 		
-		JSONObject creatorsJSON = json.getJSONObject("creators");
+		JSONObject creatorsJSON = json.getJSONObject("creators");		
 		JSONArray items = creatorsJSON.getJSONArray("items");
 		List<String> autores = new ArrayList<>();
-		for(int i=0; i<items.length(); i++) {
-			JSONObject joi = items.getJSONObject(i);
-			if(joi.has("name")) {
-				autores.add(joi.getString("name"));
+		
+		System.out.println(items.isEmpty()); //true
+		if (items.isEmpty()) {
+			comics.setCreators("nao especificado");
+		}
+		else {
+			for(int i=0; i<items.length(); i++) {
+				JSONObject joi = items.getJSONObject(i);
+				if(joi.has("name")) {
+					autores.add(joi.getString("name"));
+				}
 			}
+			String creators = null;
+			for (String string : autores) {			
+				creators += string + ", ";
+			}
+			comics.setCreators(creators.substring(0, creators.length()-2));		
 		}
-		String creators = null;
-		for (String string : autores) {			
-			creators += string + ", ";
-		}
-		comics.setCreators(creators.substring(0, creators.length()-2));
+		
 		return comics;
 	}
 

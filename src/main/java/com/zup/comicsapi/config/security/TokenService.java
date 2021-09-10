@@ -16,10 +16,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class TokenService {
 	
-	@Value("${forum.jwt.expiration}") //injeta a propriedade que esta no aplication propoertie
+	@Value("${comics.jwt.expiration}") //injeta a propriedade que esta no aplication propoertie
 	private String expiration;
 	
-	@Value("${forum.jwt.secret}") //injeta a propriedade que esta no aplication propoertie
+	@Value("${comics.jwt.secret}") //injeta a propriedade que esta no aplication propoertie
 	private String secret;
 
 	public String gerarToken(Authentication authentication) {
