@@ -15,7 +15,7 @@
 	<name>comics-api</name>
 	<description>projeto em Spring</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
