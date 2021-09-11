@@ -45,8 +45,10 @@ public class ConfiguracoesSeguranca extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/comics").permitAll()
 								.antMatchers(HttpMethod.GET, "/usuarios").permitAll()
 								.antMatchers(HttpMethod.POST, "/auth").permitAll()
-								.antMatchers(HttpMethod.GET, "/actuator/**").hasRole("MODERADOR")
-								.antMatchers("/usuarios/*").hasRole("MODERADOR") //apenas o moderador pode deletar um usuario
+								.antMatchers(HttpMethod.GET, "/actuator/**").hasRole("moderador")
+								.antMatchers(HttpMethod.POST, "/usuarios").hasRole("moderador")
+								.antMatchers(HttpMethod.PUT, "/usuarios").hasRole("moderador")
+								.antMatchers(HttpMethod.DELETE, "/usuarios").hasRole("moderador")								
 								.anyRequest().authenticated()
 //								.and().formLogin() //cria session (JSESSION, que não é stateless)
 								.and().csrf().disable()//desabilita a proteção contra o ataque hacker csrf (JSESSION)

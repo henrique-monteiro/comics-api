@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
@@ -13,8 +14,11 @@ public class Perfil implements GrantedAuthority{ //perfil de acesso ao usuario
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id 
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+//	@Id 
+//	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Id
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	private long id;
 	
 	@NotBlank(message = "Este campo não pode estar em branco.")
