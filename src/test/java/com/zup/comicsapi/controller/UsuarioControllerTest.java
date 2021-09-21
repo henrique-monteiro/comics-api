@@ -26,7 +26,7 @@ public class UsuarioControllerTest {
 	@Test
 	public void deveriaDevolver400CasoEmailJaEstejaCadastradoParaOutroUsuario() throws Exception {
 		URI uri = new URI("/usuarios");
-		String usuarioJson = "{\"nome\":\"teste\",\"email\":\"henrique-monteiro@hotmail.com\",\"cpf:111.2222.333-14\"\"dataDeNascimento:11/11/1111\"}";
+		String usuarioJson = "{\"nome\":\"teste\",\"email\":\"henrique@email.com\",\"cpf:111.2222.333-14\"\"dataDeNascimento:11/11/1111\"}";
 		mockMvc
 		.perform(MockMvcRequestBuilders.post(uri).content(usuarioJson).contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().is(400));
@@ -35,7 +35,7 @@ public class UsuarioControllerTest {
 	@Test
 	public void deveriaDevolver400CasoCPFJaEstejaCadastradoParaOutroUsuario() throws Exception {
 		URI uri = new URI("/usuarios");
-		String usuarioJson = "{\"nome\":\"teste\",\"email\":\"henriquemonteiro091@gmail.com\",\"cpf:123.456.789-14\"\"dataDeNascimento:11/11/1111\"}";
+		String usuarioJson = "{\"nome\":\"teste\",\"email\":\"henriquemonteiro091@gmail.com\",\"cpf:333.333.333-44\"\"dataDeNascimento:11/11/1111\"}";
 		mockMvc
 		.perform(MockMvcRequestBuilders.post(uri).content(usuarioJson).contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().is(400));

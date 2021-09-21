@@ -25,57 +25,52 @@ public class UsuarioService {
 	public Usuario gravaUsuario(Usuario usuario) {
 		//log: verificando se usuario existe
 		try {
-			if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()
-					|| usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
-				throw new UsuarioJaExisteException("Usuário já existe!");
-			}
+			verificaSeUsuarioJaExiste(usuario);
 		} catch (UsuarioJaExisteException e) {
 			//log: usuário já existe
-			System.out.println(e.getMessage());
 			return null;
 		}		
 		
 		//log: usuário não existe. Realizando gravação no banco!
 		return usuarioRepository.save(usuario);
 	}
-	
+
+	private void verificaSeUsuarioJaExiste(Usuario usuario) {
+		if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()
+				|| usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
+			throw new UsuarioJaExisteException("Usuário já existe!");
+		}
+	}
+
 	public Usuario buscaUsuarioPorId(Long idUsuario){
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);	
 		try {
-			if (usuarioOptional.isEmpty()) {
-				throw new UsuarioNaoExisteException("Usuário não existe!");				
-			} else {
-				return usuarioOptional.get();
-			}			
+			return verificaSeUsuarioNaoExiste(usuarioOptional);
 		} catch (UsuarioNaoExisteException e) {
-			System.out.println(e.getMessage());
 			return null;
 		}
 
 	}
 
+	private Usuario verificaSeUsuarioNaoExiste(Optional<Usuario> usuarioOptional) {
+		if (usuarioOptional.isEmpty()) {
+			throw new UsuarioNaoExisteException("Usuário não existe!");
+		}
+		return usuarioOptional.get();
+
+	}
+
 	public Usuario atualizarUsuario(Usuario usuario, UsuarioAtualizarDto usuarioAtualizar) {
 		if (!usuarioAtualizar.getNome().isBlank()) {
-			System.out.println("nome");
 			usuario.setNome(usuarioAtualizar.getNome());
 		}
-		
 		if (!usuarioAtualizar.getEmail().isBlank()) {
-			System.out.println("email");
 			usuario.setEmail(usuarioAtualizar.getEmail());
-		}	
-		
-		System.out.println(usuario);
-		
-		System.out.println("antes do return");
-
+		}
 		return usuario;
-		
-		
 	}
 
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
 		usuarioRepository.deleteById(id);
 		
 	}

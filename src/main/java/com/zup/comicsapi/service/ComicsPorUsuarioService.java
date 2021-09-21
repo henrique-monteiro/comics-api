@@ -39,6 +39,7 @@ public class ComicsPorUsuarioService {
 			
 			//caso não tenha ISBN no comic consumido pela API da Marvel
 			if (comics.getIsbn().isBlank()) {
+//			if (comics.getIsbn().length() > 0) {
 				comics.setDiaDesconto("Não possui dia com desconto");
 				comics.setDescontoAtivo(false);
 			} else {

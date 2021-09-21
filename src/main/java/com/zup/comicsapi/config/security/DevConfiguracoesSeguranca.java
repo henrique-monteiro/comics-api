@@ -1,5 +1,6 @@
 package com.zup.comicsapi.config.security;
 
+import com.zup.comicsapi.reposiroty.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.zup.comicsapi.reposiroty.UsuarioRepository;
-
 @EnableWebSecurity
 @Configuration
-@Profile("prod")
-public class ConfiguracoesSeguranca extends WebSecurityConfigurerAdapter {
+@Profile("dev")
+public class DevConfiguracoesSeguranca extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AutenticacaoService autenticacaoService;
@@ -44,18 +43,8 @@ public class ConfiguracoesSeguranca extends WebSecurityConfigurerAdapter {
 	
 	@Override //configuracoes de autorizacao (URL's publicas e bloqueadas)
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/comics").permitAll()
-								.antMatchers(HttpMethod.GET, "/usuarios").permitAll()
-								.antMatchers(HttpMethod.POST, "/auth").permitAll()
-								.antMatchers(HttpMethod.GET, "/actuator/**").hasRole("moderador")
-								.antMatchers(HttpMethod.POST, "/usuarios").hasRole("moderador")
-								.antMatchers(HttpMethod.PUT, "/usuarios").hasRole("moderador")
-								.antMatchers(HttpMethod.DELETE, "/usuarios").hasRole("moderador")								
-								.anyRequest().authenticated()
-//								.and().formLogin() //cria session (JSESSION, que não é stateless)
+		http.authorizeRequests().antMatchers("/**").permitAll()
 								.and().csrf().disable()//desabilita a proteção contra o ataque hacker csrf (JSESSION)
-								.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //politica de criacao de sessao STATELESS (nao criar session)
-								.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 								;
 	}
 	
