@@ -26,51 +26,20 @@ public class ComicsService {
 	private UsuarioService usuarioService;
 
 	public Comics buscaEGrava(String idComics, long idUsuario) {
-		
-		//ts = 1625840271
-		//private key = 21ed559bcd08b974ca2c8b73d654a2bc2980dd70
-		//public key (apikey) = 1292f518b5874baf11a56f55e28bf010	
-		
-		/*
-		 * Para obter o hash, acessar http://andti.com.br/tool/hash e, no campo "Mensagem", 
-		 * inserir ts+privateKey+publicKey, como mostrado abaixo:
-		 * 162584027121ed559bcd08b974ca2c8b73d654a2bc2980dd701292f518b5874baf11a56f55e28bf010
-		*/
-		
-		//http://gateway.marvel.com/v1/public/comics/2?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
-		UriComponents url = UriComponentsBuilder.newInstance()
-				.scheme("http")
-				.host("gateway.marvel.com")
-				.path("v1/public/comics/" + idComics)
-				.queryParam("ts", "1625840271")
-				.queryParam("apikey", "1292f518b5874baf11a56f55e28bf010")
-				.queryParam("hash", "5fe40325ef66ac6be88b70095c6d00b6")
-				.build();
-				
-		RestTemplate restTemplate = new RestTemplate();
-		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-		restTemplate = restTemplateBuilder.build();
 
-		String body = restTemplate.getForEntity(url.toString(), String.class).getBody();
-		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam
-		
-		System.out.println("\n\n");
-		System.out.println(bodyFormatada);
-		System.out.println("\n\n");
-		
-		JSONObject json = new JSONObject(bodyFormatada);
-		
+		JSONObject json = obtemJsonComicMarvel(idComics);
+
 		Comics comics = new Comics();
 		comics.setComicId(json.getInt("id"));
 		comics.setTitle(json.getString("title"));
 		comics.setIsbn(json.getString("isbn"));
-		
+
 		Usuario usuario = usuarioService.buscaUsuarioPorId(idUsuario);
-		
+
 		if (usuario == null) {
 			return null;
 		}
-		
+
 		comics.setUsuario(usuario);
 		
 		int maxLength = json.getString("description").length();
@@ -92,7 +61,6 @@ public class ComicsService {
 		JSONArray items = creatorsJSON.getJSONArray("items");
 		List<String> autores = new ArrayList<>();
 		
-		System.out.println(items.isEmpty()); //true
 		if (items.isEmpty()) {
 			comics.setCreators("nao especificado");
 		}
@@ -111,6 +79,38 @@ public class ComicsService {
 		}
 		
 		return comics;
+	}
+
+	private JSONObject obtemJsonComicMarvel(String idComics) {
+		//ts = 1625840271
+		//private key = 21ed559bcd08b974ca2c8b73d654a2bc2980dd70
+		//public key (apikey) = 1292f518b5874baf11a56f55e28bf010
+
+		/*
+		 * Para obter o hash, acessar http://andti.com.br/tool/hash e, no campo "Mensagem",
+		 * inserir ts+privateKey+publicKey, como mostrado abaixo:
+		 * 162584027121ed559bcd08b974ca2c8b73d654a2bc2980dd701292f518b5874baf11a56f55e28bf010
+		*/
+
+		//http://gateway.marvel.com/v1/public/comics/2?ts=1625840271&apikey=1292f518b5874baf11a56f55e28bf010&hash=5fe40325ef66ac6be88b70095c6d00b6
+		UriComponents url = UriComponentsBuilder.newInstance()
+				.scheme("http")
+				.host("gateway.marvel.com")
+				.path("v1/public/comics/" + idComics)
+				.queryParam("ts", "1625840271")
+				.queryParam("apikey", "1292f518b5874baf11a56f55e28bf010")
+				.queryParam("hash", "5fe40325ef66ac6be88b70095c6d00b6")
+				.build();
+
+		RestTemplate restTemplate = new RestTemplate();
+		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+		restTemplate = restTemplateBuilder.build();
+
+		String body = restTemplate.getForEntity(url.toString(), String.class).getBody();
+		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam
+
+		JSONObject json = new JSONObject(bodyFormatada);
+		return json;
 	}
 
 	public void save(Comics comics) {
