@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import com.zup.comicsapi.exceptions.UsuarioJaExisteException;
+import com.zup.comicsapi.exceptions.UsuarioNaoExisteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,57 +32,52 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
-	
-	@PostMapping
-	public ResponseEntity<Usuario> cadastrar(@RequestBody @Valid Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
-		Usuario usuario = usuarioForm;		
-		
-		if(usuarioService.gravaUsuario(usuario) == null) { //null se usuário já exite
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);	
-		}
-		
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201
-		return ResponseEntity.created(uri).body(usuario);			
-	}
-	
+
 	@GetMapping
-	public List<UsuarioDto> lista() { 
+	public List<UsuarioDto> lista() {
 		List<Usuario> usuarios = usuarioService.findAll();
 		return UsuarioDto.converterLista(usuarios);
 	}
 	
+	@PostMapping
+	public ResponseEntity<Usuario> cadastrar(@RequestBody @Valid Usuario usuarioForm, UriComponentsBuilder uriBuilder) {
+		Usuario usuario = usuarioForm;
+		try{
+			usuarioService.gravaUsuario(usuario);
+			URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri(); //retornar 201
+			return ResponseEntity.created(uri).body(usuario);
+		} catch(UsuarioJaExisteException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDto> detalhar(@PathVariable Long id) {
-		Usuario usuario = usuarioService.buscaUsuarioPorId(id);
-		if (usuario == null) {
+		try{
+			return ResponseEntity.ok(new UsuarioDto(usuarioService.buscaUsuarioPorId(id)));
+		}catch(UsuarioNaoExisteException e){
 			return ResponseEntity.notFound().build(); //404 não encontrado
-		}			
-		return ResponseEntity.ok(new UsuarioDto(usuario));
+		}
 	}
 	
 	@PutMapping("/{id}")
-	@Transactional
-	public ResponseEntity<UsuarioDto> atualizar(@PathVariable Long id, @RequestBody UsuarioAtualizarDto usuarioAtualizar){
-		Usuario usuario = usuarioService.buscaUsuarioPorId(id);
-		if (usuario == null) {
-			return ResponseEntity.notFound().build(); //404 não encontrado
-		} else {
-			usuario = usuarioService.atualizarUsuario(usuario, usuarioAtualizar);
+	@Transactional //informa para a JPA que deve fazer o commit
+	public ResponseEntity<UsuarioDto> atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioAtualizarDto usuarioAtualizar){
+		try{
+			Usuario usuario = usuarioService.atualizarUsuario(usuarioService.buscaUsuarioPorId(id), usuarioAtualizar);
 			return ResponseEntity.ok(new UsuarioDto(usuario));
-		}		
+		}catch(UsuarioNaoExisteException e){
+			return ResponseEntity.notFound().build(); //404 não encontrado
+		}
 	}
 	
 	@DeleteMapping("/{id}")
-	@Transactional
-	public ResponseEntity<?> remover(@PathVariable Long id) {
-		if (usuarioService.buscaUsuarioPorId(id) == null) {
-			return ResponseEntity.notFound().build(); //404 não encontrado
-		} else {
+	public ResponseEntity remover(@PathVariable Long id) {
+		try{
 			usuarioService.delete(id);
 			return ResponseEntity.ok().build();
-		}		
+		}catch(UsuarioNaoExisteException e) {
+			return ResponseEntity.notFound().build(); //404 não encontrado
+		}
 	}
-	
-	
-	
 }

@@ -1,6 +1,8 @@
 package com.zup.comicsapi.controller;
 
 
+import com.zup.comicsapi.exceptions.UsuarioNaoExisteException;
+import com.zup.comicsapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +20,19 @@ import com.zup.comicsapi.service.ComicsPorUsuarioService;
 public class ComicsPorUsuarioController {
 		
 	@Autowired
+	private UsuarioService usuarioService;
+
+	@Autowired
 	private ComicsPorUsuarioService comicsPorUsuarioService;
 
 	@GetMapping("/{idUsuario}")
 	public ResponseEntity<UsuarioComComicsDto> comicsPorUsuario(@PathVariable Long idUsuario) {
-		Usuario usuarioComListaAtualizada = comicsPorUsuarioService.buscaComicsPorUsuario(idUsuario);
-		
-		if(usuarioComListaAtualizada == null) { //no caso de usuario nao existe
+		Usuario usuario;
+		try{
+			usuario = usuarioService.buscaUsuarioPorId(idUsuario);
+			return ResponseEntity.ok(UsuarioComComicsDto.convert(comicsPorUsuarioService.atualizaValoresListaComics(usuario)));
+		}catch(UsuarioNaoExisteException e){
 			return ResponseEntity.notFound().build();
 		}
-		
-		return ResponseEntity.ok(UsuarioComComicsDto.convert(usuarioComListaAtualizada));
 	}
 }

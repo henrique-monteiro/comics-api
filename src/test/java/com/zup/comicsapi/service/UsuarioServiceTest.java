@@ -1,9 +1,17 @@
 package com.zup.comicsapi.service;
 
+import com.zup.comicsapi.exceptions.UsuarioJaExisteException;
 import com.zup.comicsapi.model.Usuario;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.TransactionSystemException;
+
+import javax.persistence.RollbackException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,17 +32,14 @@ public class UsuarioServiceTest {
 //        usuarioRepository.save(this.usuario);
 //    }
 
+
     @Test
     public void deveriaRetornarNullPoisOCPFJaExiste() {
-        assertEquals(null, usuarioService.gravaUsuario(new Usuario("henrique", "henrique@outromail.com", "333.333.333-44", "11/01/2001")));
+        assertThrows(TransactionSystemException.class, () -> usuarioService.gravaUsuario(new Usuario("henrique", "henrique@outromail.com", "333.333.333-44", "11/01/2001")));
     }
 
     @Test
     public void deveriaRetornarNullPoisOEmailJaExiste() {
-        assertEquals(null, usuarioService.gravaUsuario(new Usuario("henrique", "henrique@email.com", "333.333.333-45", "11/01/2001")));
+        assertThrows(TransactionSystemException.class, () -> usuarioService.gravaUsuario(new Usuario("henrique", "henrique@email.com", "333.333.333-45", "11/01/2001")));
     }
-
-
-
-
 }

@@ -18,70 +18,29 @@ public class ComicsPorUsuarioService {
 	@Autowired
 	private UsuarioService usuarioService;	
 	
-	public Usuario buscaComicsPorUsuario(Long idUsuario) {	//feedback ZUP: nao trabalhar com id para busacs
-			
-		Usuario usuario = usuarioService.buscaUsuarioPorId(idUsuario);
+	public Usuario atualizaValoresListaComics(Usuario usuario) {
 		
-		if (usuario == null) {
-			return null;
-		}
-		
-		List<Comics> listaAtualizada = atualizaValoresDaListaDeComics(usuario);
-			
-		usuario.setListaDeComics(listaAtualizada);
-		return usuario;
-	}
-
-	private List<Comics> atualizaValoresDaListaDeComics(Usuario usuario) {
-		char finalIsbn;	//para verificar o dia do desconto
 		List<Comics> listaAtualizada = new ArrayList<>();
+		char finalIsbn;	//para verificar o dia do desconto
+
 		for (Comics comics : usuario.getListaDeComics()) {
-			
 			//caso não tenha ISBN no comic consumido pela API da Marvel
 			if (comics.getIsbn().isBlank()) {
-//			if (comics.getIsbn().length() > 0) {
 				comics.setDiaDesconto("Não possui dia com desconto");
 				comics.setDescontoAtivo(false);
 			} else {
 				finalIsbn = comics.getIsbn().charAt(comics.getIsbn().length()-1);
-
 				comics.setDiaDesconto(diaDesconto(finalIsbn));  //verifica o dia do desconto
-				
 				comics.setDescontoAtivo(verificaDescontoAtivo(comics.getDiaDesconto())); //verifica se o desconto está ativo
-			}			
-			
+			}
 			if (comics.isDescontoAtivo()) {
 				comics.setPrice(comics.getPrice().subtract(comics.getPrice().multiply(new BigDecimal(0.1)))); //atualiza o preço do comics
-			}			
+			}
 			listaAtualizada.add(comics);
 		}
-		return listaAtualizada;
-	}
-
-	private boolean verificaDescontoAtivo(String diaDesconto) {
-		Date data = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(data);
-		int day = cal.get(Calendar.DAY_OF_WEEK);
-		
-		if (day == 2 && diaDesconto.compareTo("segunda-feira") == 0 ) {			
-			return true;
-		}
-		else if (day == 3 && diaDesconto.compareTo("terça-feira") == 0 ){
-			return true;
-		}
-		else if (day == 4 && diaDesconto.compareTo("quarta-feira") == 0 ){
-			return true;
-		}
-		else if (day == 5 && diaDesconto.compareTo("quinta-feira") == 0 ){
-			return true;
-		}
-		else if (day == 6 && diaDesconto.compareTo("sexta-feira") == 0 ){
-			return true;
-		}
-		else {
-			return false;
-		}		
+			
+		usuario.setListaDeComics(listaAtualizada);
+		return usuario;
 	}
 
 	private String diaDesconto(char finalIsbn) {
@@ -101,6 +60,32 @@ public class ComicsPorUsuarioService {
 			return "sexta-feira";
 		}
 		return null;
-	}	
+	}
+
+	private boolean verificaDescontoAtivo(String diaDesconto) {
+		Date data = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(data);
+		int day = cal.get(Calendar.DAY_OF_WEEK);
+
+		if (day == 2 && diaDesconto.compareTo("segunda-feira") == 0 ) {
+			return true;
+		}
+		else if (day == 3 && diaDesconto.compareTo("terça-feira") == 0 ){
+			return true;
+		}
+		else if (day == 4 && diaDesconto.compareTo("quarta-feira") == 0 ){
+			return true;
+		}
+		else if (day == 5 && diaDesconto.compareTo("quinta-feira") == 0 ){
+			return true;
+		}
+		else if (day == 6 && diaDesconto.compareTo("sexta-feira") == 0 ){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
 

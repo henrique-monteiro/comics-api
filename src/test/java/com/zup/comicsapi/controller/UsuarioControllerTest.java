@@ -26,8 +26,8 @@ public class UsuarioControllerTest {
 		URI uri = new URI("/usuarios");
 		String usuarioJson = "{\"nome\":\"teste\",\"email\":\"henrique@email.com\",\"cpf:111.2222.333-14\"\"dataDeNascimento:11/11/1111\"}";
 		mockMvc
-		.perform(MockMvcRequestBuilders.post(uri).content(usuarioJson).contentType(MediaType.APPLICATION_JSON))
-		.andExpect(MockMvcResultMatchers.status().is(400));
+				.perform(MockMvcRequestBuilders.post(uri).content(usuarioJson).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test

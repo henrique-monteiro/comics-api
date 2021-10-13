@@ -1,5 +1,6 @@
 package com.zup.comicsapi.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ComicsService {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	public Comics buscaEGrava(String idComics, long idUsuario) {
+	public Comics buscaEGrava(String idComics, Usuario usuario) {
 
 		JSONObject json = obtemJsonComicMarvel(idComics);
 
@@ -33,36 +34,21 @@ public class ComicsService {
 		comics.setComicId(json.getInt("id"));
 		comics.setTitle(json.getString("title"));
 		comics.setIsbn(json.getString("isbn"));
-
-		Usuario usuario = usuarioService.buscaUsuarioPorId(idUsuario);
-
-		if (usuario == null) {
-			return null;
-		}
-
 		comics.setUsuario(usuario);
-		
-		int maxLength = json.getString("description").length();
-		if (maxLength < 250) {
-			comics.setDescription(json.getString("description"));
-		} else {
-			comics.setDescription(json.getString("description").substring(0, 250) + " ...");
-		}	
-		
-		JSONArray prices = json.getJSONArray( "prices" );		
-		for(int i=0; i<prices.length(); i++) {
-			JSONObject joi = prices.getJSONObject(i);
-			if(joi.has("price")) {
-				comics.setPrice(joi.getBigDecimal("price"));
-			}
-		}
-		
-		JSONObject creatorsJSON = json.getJSONObject("creators");		
+		comics.setDescription(obtemDescricao(json));
+		comics.setPrice(obtemPreco(json));
+		comics.setCreators(obtemAutores(json));
+
+		return comics;
+	}
+
+	private String obtemAutores(JSONObject json) {
+		JSONObject creatorsJSON = json.getJSONObject("creators");
 		JSONArray items = creatorsJSON.getJSONArray("items");
 		List<String> autores = new ArrayList<>();
-		
+
 		if (items.isEmpty()) {
-			comics.setCreators("nao especificado");
+			return "nao especificado";
 		}
 		else {
 			for(int i=0; i<items.length(); i++) {
@@ -72,13 +58,22 @@ public class ComicsService {
 				}
 			}
 			String creators = null;
-			for (String string : autores) {			
+			for (String string : autores) {
 				creators += string + ", ";
 			}
-			comics.setCreators(creators.substring(0, creators.length()-2));		
+			return creators.substring(0, creators.length()-2);
 		}
-		
-		return comics;
+	}
+
+	private BigDecimal obtemPreco(JSONObject json) {
+		JSONArray prices = json.getJSONArray( "prices" );
+		for(int i=0; i<prices.length(); i++) {
+			JSONObject joi = prices.getJSONObject(i);
+			if(joi.has("price")) {
+				return joi.getBigDecimal("price");
+			}
+		}
+		return null;
 	}
 
 	private JSONObject obtemJsonComicMarvel(String idComics) {
@@ -102,15 +97,32 @@ public class ComicsService {
 				.queryParam("hash", "5fe40325ef66ac6be88b70095c6d00b6")
 				.build();
 
+		System.out.println("\n\n");
+		System.out.println(url.toString());
+		System.out.println("\n\n");
+
 		RestTemplate restTemplate = new RestTemplate();
 		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
 		restTemplate = restTemplateBuilder.build();
 
 		String body = restTemplate.getForEntity(url.toString(), String.class).getBody();
+		System.out.println("\n\n");
+		System.out.println(body);
+		System.out.println("\n\n");
+
 		String bodyFormatada = body.substring(317, body.length()-3); //-3 para retirar os colchetes e chaves que sobravam
 
 		JSONObject json = new JSONObject(bodyFormatada);
 		return json;
+	}
+
+	private String obtemDescricao(JSONObject json) {
+		int maxLength = json.getString("description").length();
+		if (maxLength < 250) {
+			return json.getString("description");
+		} else {
+			return json.getString("description").substring(0, 250) + " ...";
+		}
 	}
 
 	public void save(Comics comics) {

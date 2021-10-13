@@ -13,9 +13,9 @@ import com.zup.comicsapi.model.Usuario;
 @DataJpaTest //anotação específica para classes do tipo repository
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //quando não estamos utilizando BD em memória
 public class UsuarioRepositoryTest {
-
 	@Autowired
 	private UsuarioRepository repository;
+
 	@Test
 	public void deveriaCarregarUmUsuarioAoBuscarPeloSeuId() {
 		long idUsuario = 1;

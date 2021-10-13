@@ -1,9 +1,12 @@
 package com.zup.comicsapi.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.zup.comicsapi.dto.UsuarioAtualizarDto;
@@ -23,42 +26,21 @@ public class UsuarioService {
 	}
 
 	public Usuario gravaUsuario(Usuario usuario) {
-		//log: verificando se usuario existe
-		try {
-			verificaSeUsuarioJaExiste(usuario);
-		} catch (UsuarioJaExisteException e) {
-			//log: usuário já existe
-			return null;
-		}		
-		
-		//log: usuário não existe. Realizando gravação no banco!
-		return usuarioRepository.save(usuario);
-	}
-
-	private void verificaSeUsuarioJaExiste(Usuario usuario) {
-		if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()
-				|| usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
+		try{
+			return usuarioRepository.save(usuario);
+		} catch(DataIntegrityViolationException e){
 			throw new UsuarioJaExisteException("Usuário já existe!");
 		}
 	}
 
 	public Usuario buscaUsuarioPorId(Long idUsuario){
-		Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);	
 		try {
-			return verificaSeUsuarioNaoExiste(usuarioOptional);
-		} catch (UsuarioNaoExisteException e) {
-			return null;
-		}
-
-	}
-
-	private Usuario verificaSeUsuarioNaoExiste(Optional<Usuario> usuarioOptional) {
-		if (usuarioOptional.isEmpty()) {
+			return usuarioRepository.findById(idUsuario).get();
+		} catch (NoSuchElementException e) {
 			throw new UsuarioNaoExisteException("Usuário não existe!");
 		}
-		return usuarioOptional.get();
-
 	}
+
 
 	public Usuario atualizarUsuario(Usuario usuario, UsuarioAtualizarDto usuarioAtualizar) {
 		if (!usuarioAtualizar.getNome().isBlank()) {
@@ -71,7 +53,10 @@ public class UsuarioService {
 	}
 
 	public void delete(Long id) {
-		usuarioRepository.deleteById(id);
-		
+		try{
+			usuarioRepository.deleteById(id);
+		}catch(EmptyResultDataAccessException e){
+			throw new UsuarioNaoExisteException("Usuário não existe!");
+		}
 	}
 }
