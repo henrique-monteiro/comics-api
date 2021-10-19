@@ -18,9 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class UsuarioServiceTest {
 
-//    private Usuario usuario;
-//    @Autowired
-//    private UsuarioRepository usuarioRepository;
     @Autowired
     private UsuarioService usuarioService;
 
@@ -35,11 +32,23 @@ public class UsuarioServiceTest {
 
     @Test
     public void deveriaRetornarNullPoisOCPFJaExiste() {
-        assertThrows(TransactionSystemException.class, () -> usuarioService.gravaUsuario(new Usuario("henrique", "henrique@outromail.com", "333.333.333-44", "11/01/2001")));
+        System.out.println("\n\n");
+        System.out.println(usuarioService.listaUsuarios());
+        System.out.println("\n\n");
+
+        assertThrows(UsuarioJaExisteException.class,
+                () -> usuarioService.gravaUsuario(new Usuario(
+                "henrique", "henrique@outromail.com",
+                "333.333.333-44", "11/01/2001",
+                "$2a$10$MC4Q/dGI940PglYZJm0gQ.8mR0l0ydrKHRVwgwQRt5FGOCx9S8p62")));
     }
 
     @Test
     public void deveriaRetornarNullPoisOEmailJaExiste() {
-        assertThrows(TransactionSystemException.class, () -> usuarioService.gravaUsuario(new Usuario("henrique", "henrique@email.com", "333.333.333-45", "11/01/2001")));
+        assertThrows(UsuarioJaExisteException.class,
+                () -> usuarioService.gravaUsuario(new Usuario(
+                "henrique", "henrique@email.com",
+                "333.333.333-45", "11/01/2001",
+                "$2a$10$MC4Q/dGI940PglYZJm0gQ.8mR0l0ydrKHRVwgwQRt5FGOCx9S8p62")));
     }
 }

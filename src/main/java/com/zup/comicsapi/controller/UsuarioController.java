@@ -35,7 +35,7 @@ public class UsuarioController {
 
 	@GetMapping
 	public List<UsuarioDto> lista() {
-		List<Usuario> usuarios = usuarioService.findAll();
+		List<Usuario> usuarios = usuarioService.listaUsuarios();
 		return UsuarioDto.converterLista(usuarios);
 	}
 	

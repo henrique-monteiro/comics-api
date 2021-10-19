@@ -60,11 +60,12 @@ public class Usuario implements UserDetails {
 	public Usuario() {	} //construtor vazio necessário para JPA
 	
 	
-	public Usuario(String nome, String email, String cpf, String dataDeNascimento) {
+	public Usuario(String nome, String email, String cpf, String dataDeNascimento, String senha) {
 		this.nome = nome;
 		this.email = email;
 		this.cpf = cpf;
 		this.dataDeNascimento = dataDeNascimento;
+		this.senha = senha;
 	}
 
 	public Long getId() {
